@@ -21,4 +21,7 @@ interface WatchlistFundDao {
 
     @Query("SELECT EXISTS(SELECT 1 FROM watchlist_funds WHERE schemeCode = :schemeCode)")
     fun isFundInAnyWatchlist(schemeCode: String): Flow<Boolean>
+
+    @Query("SELECT * FROM watchlist_funds")
+    fun getAllFunds(): Flow<List<WatchlistFundEntity>>
 }

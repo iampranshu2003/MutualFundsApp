@@ -1,5 +1,7 @@
 package com.example.mutualfundsapp.di
 
+import com.example.mutualfundsapp.data.remote.MfApiService
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,6 +29,10 @@ object NetworkModule {
         }
         return builder.build()
     }
+
+    @Provides
+    @Singleton
+    fun provideGson(): Gson = Gson()
 
     @Provides
     @Singleton
