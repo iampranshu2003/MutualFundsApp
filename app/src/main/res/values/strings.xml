@@ -6,6 +6,30 @@
     <string name="new_watchlist_hint">Create new watchlist</string>
     <string name="add">Add</string>
     <string name="done">Done</string>
+    <string name="back">Back</string>
+    <string name="bookmark">Bookmark</string>
+    <string name="label_type">Type</string>
+    <string name="label_aum">AUM</string>
+    <string name="label_nav">NAV</string>
+    <string name="placeholder_dash">—</string>
+    <string name="nav_change_positive">+%1$s (%2$s%%)</string>
+    <string name="nav_change_negative">%1$s (%2$s%%)</string>
+    <string name="range_1m">1M</string>
+    <string name="range_3m">3M</string>
+    <string name="range_6m">6M</string>
+    <string name="range_1y">1Y</string>
+    <string name="range_all">ALL</string>
+    <string name="watchlist_created">Watchlist \"%1$s\" created</string>
+    <string name="watchlist_create_failed">Could not create watchlist</string>
+    <string name="watchlist_update_failed">Could not update watchlist</string>
+    <string name="unknown_error">Something went wrong</string>
+    <string name="watchlist_fund_count">%1$d funds</string>
+    <string name="remove_fund">Remove fund</string>
+    <string name="watchlist_empty_title">No watchlists yet</string>
+    <string name="watchlist_empty_subtitle">Save funds here to track them easily</string>
+    <string name="watchlist_folder_empty_title">No funds in this watchlist</string>
+    <string name="watchlist_folder_empty_subtitle">Add funds to track them here</string>
+    <string name="explore_funds">Explore Funds</string>
     <string name="empty_explore_title">No categories yet</string>
     <string name="empty_explore_subtitle">Try again in a few moments</string>
     <string name="category_index">Index Funds</string>
@@ -13,5 +37,10 @@
     <string name="category_tax">Tax Saver ELSS</string>
     <string name="category_largecap">Large Cap</string>
     <string name="view_all">View All ›</string>
-
+    <string name="watchlist_empty_title">No watchlists yet</string>
+    <string name="watchlist_empty_subtitle">Save funds here to track them easily</string>
+    <string name="watchlist_folder_empty_title">No funds in this watchlist</string>
+    <string name="watchlist_folder_empty_subtitle">Add funds to track them here</string>
+    <string name="explore_funds">Explore Funds</string>
+    <string name="remove_fund">Remove fund</string>
 </resources>

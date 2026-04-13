@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.example.mutualfundsapp.presentation.funddetail.FundDetailRoute
 
 @Composable
 fun NavGraph(
@@ -37,7 +38,7 @@ fun NavGraph(
                 )
             }
             composable(Screen.FundDetail("{schemeCode}").route) {
-                FundDetailScreen(
+                FundDetailRoute(
                     state =,
                     onEvent =
                 )
