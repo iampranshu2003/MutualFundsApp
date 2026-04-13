@@ -7,8 +7,6 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import com.example.mutualfundsapp.data.repository.MutualFundsRepositoryImpl
-import com.example.mutualfundsapp.data.repository.WatchlistRepositoryImpl
 
 @Module
 @InstallIn(SingletonComponent::class)

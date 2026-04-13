@@ -9,8 +9,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
-import com.example.mutualfundsapp.BuildConfig
-import com.example.mutualfundsapp.data.remote.MfApiService
 
 
 @Module

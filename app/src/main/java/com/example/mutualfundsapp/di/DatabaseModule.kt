@@ -12,9 +12,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import com.example.mutualfundsapp.data.local.MfDatabase
-import com.example.mutualfundsapp.data.local.dao.WatchlistDao
-import com.example.mutualfundsapp.data.local.dao.WatchlistFundDao
 
 @Module
 @InstallIn(SingletonComponent::class)
