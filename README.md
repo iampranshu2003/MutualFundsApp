@@ -44,7 +44,7 @@ This project was built for the Mobile SDE Intern assignment and focuses on clean
 - Search endpoint: `https://api.mfapi.in/mf/search?q={query}`
 - Fund detail endpoint: `https://api.mfapi.in/mf/{scheme_code}`
 
-Note: Since MFAPI does not provide direct category APIs, category sections are populated using keyword-based search queries as suggested in the assignment brief.
+Note: Since MFAPI does not provide direct category APIs, category sections are populated using keyword-based search queries as suggested 
 
 ## Project structure
 
@@ -68,18 +68,6 @@ Note: Since MFAPI does not provide direct category APIs, category sections are p
 3. Let Gradle sync complete
 4. Run on emulator/device
 
-Build debug APK from terminal:
-
-```bash
-./gradlew clean assembleDebug
-```
-
-Run unit tests:
-
-```bash
-./gradlew clean testDebugUnitTest
-```
-
 ## Screenshots
 
 <p align="center">
@@ -96,12 +84,5 @@ Run unit tests:
 
 ## Demo and submission links
 
-- Screen recording (Drive): `Add your public Drive link here`
-- APK (Drive): `Add your public Drive link here`
+- Screen recording (Drive): `https://drive.google.com/drive/folders/17LHmyxsW57f6_EElV8D0gymYCc8qckIU?usp=share_link`
 - GitHub repository: [MutualFundsApp](https://github.com/iampranshu2003/MutualFundsApp)
-
-## Interview-ready notes
-
-- Architecture and module separation are intentionally kept clean for easier extension.
-- Core assignment functionality is implemented first, with brownie-point features (debounce, theme support, tests) included.
-- The codebase is organized so each screen has clear state, events, and UI contracts for maintainability.
