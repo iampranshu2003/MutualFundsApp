@@ -2,6 +2,8 @@ package com.example.mutualfundsapp.presentation.viewall
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mutualfundsapp.domain.model.FundSummary
+import com.example.mutualfundsapp.domain.usecase.GetAllFundsUseCase
 import com.example.mutualfundsapp.domain.usecase.SearchFundsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -15,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ViewAllViewModel @Inject constructor(
-    private val searchFundsUseCase: SearchFundsUseCase
+    private val searchFundsUseCase: SearchFundsUseCase,
+    private val getAllFundsUseCase: GetAllFundsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ViewAllState())
@@ -34,19 +37,42 @@ class ViewAllViewModel @Inject constructor(
 
     private fun load(category: String) {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, error = null, category = category) }
+            _uiState.update {
+                it.copy(
+                    isLoading = true,
+                    isLoadingMore = false,
+                    error = null,
+                    category = category,
+                    allFunds = emptyList(),
+                    visibleFunds = emptyList(),
+                    loadedCount = 0,
+                    hasMore = true
+                )
+            }
 
-            val result = searchFundsUseCase(category)
+            val result = if (category == "all") {
+                getAllFundsUseCase(limit = _uiState.value.pageSize, offset = 0)
+            } else {
+                searchFundsUseCase(category)
+            }
             result.fold(
                 onSuccess = { funds ->
-                    val initial = funds.take(_uiState.value.pageSize)
+                    val visible = if (category == "all") {
+                        funds
+                    } else {
+                        funds.take(_uiState.value.pageSize)
+                    }
                     _uiState.update {
                         it.copy(
                             isLoading = false,
                             allFunds = funds,
-                            visibleFunds = initial,
-                            loadedCount = initial.size,
-                            hasMore = funds.size > initial.size
+                            visibleFunds = visible,
+                            loadedCount = visible.size,
+                            hasMore = if (category == "all") {
+                                funds.size == _uiState.value.pageSize
+                            } else {
+                                funds.size > visible.size
+                            }
                         )
                     }
                 },
@@ -66,6 +92,11 @@ class ViewAllViewModel @Inject constructor(
         val currentState = _uiState.value
         if (currentState.isLoadingMore || !currentState.hasMore) return
 
+        if (currentState.category == "all") {
+            loadNextAllFundsPage(currentState)
+            return
+        }
+
         viewModelScope.launch {
             _uiState.update { it.copy(isLoadingMore = true) }
 
@@ -81,6 +112,40 @@ class ViewAllViewModel @Inject constructor(
                     hasMore = nextCount < currentState.allFunds.size
                 )
             }
+        }
+    }
+
+    private fun loadNextAllFundsPage(currentState: ViewAllState) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoadingMore = true) }
+
+            val result = getAllFundsUseCase(
+                limit = currentState.pageSize,
+                offset = currentState.loadedCount
+            )
+
+            result.fold(
+                onSuccess = { funds ->
+                    val merged = (currentState.allFunds + funds).distinctBy { it.schemeCode }
+                    _uiState.update {
+                        it.copy(
+                            isLoadingMore = false,
+                            allFunds = merged,
+                            visibleFunds = merged,
+                            loadedCount = currentState.loadedCount + funds.size,
+                            hasMore = funds.size == currentState.pageSize
+                        )
+                    }
+                },
+                onFailure = { throwable ->
+                    _uiState.update {
+                        it.copy(
+                            isLoadingMore = false,
+                            error = throwable.message.orEmpty()
+                        )
+                    }
+                }
+            )
         }
     }
 

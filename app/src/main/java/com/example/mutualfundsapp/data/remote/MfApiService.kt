@@ -8,6 +8,12 @@ import retrofit2.http.Query
 
 interface MfApiService {
 
+    @GET("mf")
+    suspend fun getAllFunds(
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
+    ): List<SearchResultDto>
+
     @GET("mf/search")
     suspend fun searchFunds(@Query("q") query: String): List<SearchResultDto>
 

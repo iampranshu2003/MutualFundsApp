@@ -157,6 +157,7 @@ fun ViewAllScreen(
 @Composable
 private fun categoryTitle(category: String): String {
     return when (category) {
+        "all" -> stringResource(R.string.category_all)
         "index" -> stringResource(R.string.category_index)
         "bluechip" -> stringResource(R.string.category_bluechip)
         "tax" -> stringResource(R.string.category_tax)

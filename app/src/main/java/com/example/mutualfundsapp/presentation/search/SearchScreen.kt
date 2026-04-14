@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -71,31 +73,38 @@ fun SearchScreen(
     }
 
     Column(modifier = modifier.fillMaxSize()) {
-        TopAppBar(
-            title = { Text(stringResource(R.string.search_title)) },
-            navigationIcon = {
-                IconButton(onClick = onNavigateBack) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = stringResource(R.string.back)
-                    )
-                }
-            }
-        )
-
-        OutlinedTextField(
-            value = state.query,
-            onValueChange = { onEvent(SearchEvent.UpdateQuery(it)) },
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
-                .focusRequester(focusRequester),
-            placeholder = { Text(stringResource(R.string.search_hint)) },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
-            keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
-            colors = OutlinedTextFieldDefaults.colors()
-        )
+                .padding(horizontal = 12.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onNavigateBack) {
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = stringResource(R.string.back)
+                )
+            }
+            OutlinedTextField(
+                value = state.query,
+                onValueChange = { onEvent(SearchEvent.UpdateQuery(it)) },
+                modifier = Modifier
+                    .weight(1f)
+                    .focusRequester(focusRequester),
+                placeholder = { Text(stringResource(R.string.search_hint)) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
+                trailingIcon = {
+                    if (state.query.isNotBlank()) {
+                        IconButton(onClick = { onEvent(SearchEvent.UpdateQuery("")) }) {
+                            Text(text = "x")
+                        }
+                    }
+                },
+                colors = OutlinedTextFieldDefaults.colors()
+            )
+        }
 
         if (state.isLoading) {
             LinearProgressIndicator(modifier = Modifier.fillMaxWidth())

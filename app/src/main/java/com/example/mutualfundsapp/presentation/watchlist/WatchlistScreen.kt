@@ -3,6 +3,7 @@ package com.example.mutualfundsapp.presentation.watchlist
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -59,35 +60,47 @@ fun WatchlistRoute(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WatchlistScreen(
     state: WatchlistState,
     onEvent: (WatchlistEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    when {
-        state.isLoading -> LoadingState(modifier)
-        state.error != null -> {
-            val message = state.error?.takeIf { it.isNotBlank() }
-                ?: stringResource(R.string.unknown_error)
-            ErrorState(
-                message = message,
-                onRetry = { onEvent(WatchlistEvent.Retry) },
-                modifier = modifier
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("My Portfolios") }
             )
+        },
+        modifier = modifier
+    ) { padding ->
+        Box(modifier = Modifier.padding(padding)) {
+            when {
+                state.isLoading -> LoadingState(Modifier.fillMaxSize())
+                state.error != null -> {
+                    val message = state.error?.takeIf { it.isNotBlank() }
+                        ?: stringResource(R.string.unknown_error)
+                    ErrorState(
+                        message = message,
+                        onRetry = { onEvent(WatchlistEvent.Retry) },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+                state.watchlists.isEmpty() -> EmptyState(
+                    title = stringResource(R.string.watchlist_empty_title),
+                    subtitle = stringResource(R.string.watchlist_empty_subtitle),
+                    buttonText = stringResource(R.string.explore_funds),
+                    onButtonClick = { onEvent(WatchlistEvent.NavigateToExplore) },
+                    modifier = Modifier.fillMaxSize()
+                )
+                else -> WatchlistListContent(
+                    watchlists = state.watchlists,
+                    onWatchlistClick = { watchlistId -> onEvent(WatchlistEvent.OpenWatchlist(watchlistId)) },
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
         }
-        state.watchlists.isEmpty() -> EmptyState(
-            title = stringResource(R.string.watchlist_empty_title),
-            subtitle = stringResource(R.string.watchlist_empty_subtitle),
-            buttonText = stringResource(R.string.explore_funds),
-            onButtonClick = { onEvent(WatchlistEvent.NavigateToExplore) },
-            modifier = modifier
-        )
-        else -> WatchlistListContent(
-            watchlists = state.watchlists,
-            onWatchlistClick = { watchlistId -> onEvent(WatchlistEvent.OpenWatchlist(watchlistId)) },
-            modifier = modifier
-        )
     }
 }
 
@@ -116,11 +129,10 @@ private fun WatchlistFolderCard(
     watchlist: Watchlist,
     onClick: () -> Unit
 ) {
-    Card(
+    OutlinedCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
             modifier = Modifier

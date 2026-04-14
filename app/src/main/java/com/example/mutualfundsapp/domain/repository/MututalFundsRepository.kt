@@ -5,6 +5,7 @@ import com.example.mutualfundsapp.domain.model.FundSummary
 
 
 interface MutualFundsRepository {
+    suspend fun getAllFunds(limit: Int, offset: Int): Result<List<FundSummary>>
     suspend fun searchFunds(query: String): Result<List<FundSummary>>
     suspend fun getFundDetail(schemeCode: String): Result<FundDetail>
     suspend fun getExploreCategories(): Result<Map<String, List<FundSummary>>>

@@ -10,7 +10,7 @@ data class ViewAllState(
     val allFunds: List<FundSummary> = emptyList(),
     val visibleFunds: List<FundSummary> = emptyList(),
     val loadedCount: Int = 0,
-    val pageSize: Int = 20,
+    val pageSize: Int = 10,
     val hasMore: Boolean = true
 )
 

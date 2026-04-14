@@ -1,21 +1,22 @@
 package com.example.mutualfundsapp.presentation.explore
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -39,15 +40,32 @@ fun ExploreScreen(
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         TopAppBar(
-            title = { Text(stringResource(R.string.app_name)) },
+            title = { Text("Mf Explorer") },
             actions = {
-                IconButton(onClick = { onEvent(ExploreEvent.OpenSearch) }) {
-                    Icon(Icons.Default.Search, contentDescription = null)
-                }
+                Text(
+                    text = stringResource(R.string.view_all),
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .clickable { onEvent(ExploreEvent.OpenCategory("all")) }
+                )
                 IconButton(onClick = onToggleTheme) {
                     Icon(painterResource(R.drawable.dark), contentDescription = stringResource(R.string.toggle_theme))
                 }
             }
+        )
+
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            readOnly = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .clickable { onEvent(ExploreEvent.OpenSearch) },
+            placeholder = { Text(stringResource(R.string.search_hint)) },
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+            singleLine = true
         )
 
         when {
@@ -81,38 +99,51 @@ fun ExploreScreen(
                     )
                 } else {
                     Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
+                            .padding(bottom = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(18.dp)
                     ) {
                         sections.forEach { (key, title) ->
-                            val funds = state.categories[key].orEmpty()
+                            val funds = state.categories[key].orEmpty().take(4)
                             if (funds.isNotEmpty()) {
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(horizontal = 16.dp),
+                                        .padding(horizontal = 16.dp, vertical = 4.dp),
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
-                                    Text(text = title, style = MaterialTheme.typography.titleMedium)
+                                    Text(text = title.uppercase(), style = MaterialTheme.typography.titleSmall)
                                     Text(
                                         text = stringResource(R.string.view_all),
                                         color = MaterialTheme.colorScheme.primary,
                                         modifier = Modifier
-                                            .padding(4.dp)
+                                            .padding(top = 2.dp)
                                             .clickable { onEvent(ExploreEvent.OpenCategory(key)) }
                                     )
                                 }
 
-                                LazyRow(
-                                    contentPadding = PaddingValues(horizontal = 16.dp),
-                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp),
+                                    verticalArrangement = Arrangement.spacedBy(10.dp)
                                 ) {
-                                    items(funds) { fund ->
-                                        FundCard(
-                                            name = fund.schemeName,
-                                            nav = fund.nav,
-                                            onClick = { onEvent(ExploreEvent.OpenFund(fund.schemeCode)) }
-                                        )
+                                    funds.chunked(2).forEach { rowFunds ->
+                                        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                                            rowFunds.forEach { fund ->
+                                                FundCard(
+                                                    name = fund.schemeName,
+                                                    nav = fund.nav,
+                                                    onClick = { onEvent(ExploreEvent.OpenFund(fund.schemeCode)) },
+                                                    modifier = Modifier.weight(1f)
+                                                )
+                                            }
+                                            if (rowFunds.size == 1) {
+                                                Spacer(modifier = Modifier.weight(1f))
+                                            }
+                                        }
                                     }
                                 }
                             }

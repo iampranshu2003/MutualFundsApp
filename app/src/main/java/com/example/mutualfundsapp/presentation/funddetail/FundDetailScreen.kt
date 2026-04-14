@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.mutualfundsapp.R
 import com.example.mutualfundsapp.presentation.components.*
@@ -156,12 +158,15 @@ private fun FundDetailContent(
 
         // Chart
         item {
-            NavChart(
-                points = state.filteredHistory,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(250.dp)
-            )
+            OutlinedCard {
+                NavChart(
+                    points = state.filteredHistory,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1.8f)
+                        .padding(8.dp)
+                )
+            }
         }
 
         // Range selector pills
@@ -185,24 +190,25 @@ private fun FundDetailContent(
 private fun FundHeaderInfo(state: FundDetailState) {
     Column {
         Text(
-            text = state.amcName,
-            style = MaterialTheme.typography.bodyMedium,
+            text = state.schemeName.uppercase(),
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
+        )
+        Spacer(modifier = Modifier.height(2.dp))
+        Text(
+            text = "Category: ${state.schemeType}",
+            style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        Spacer(modifier = Modifier.height(4.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            AssistChip(
-                onClick = { /* no action */ },
-                label = { Text(state.schemeType) }
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = stringResource(R.string.nav_value, state.nav),
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
-            )
-        }
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            text = stringResource(R.string.nav_value, state.nav),
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.ExtraBold
+        )
+        Spacer(modifier = Modifier.height(6.dp))
         val changeValue = remember(state.navChangeValue) {
             String.format("%.2f", state.navChangeValue)
         }
@@ -252,9 +258,8 @@ private fun RangeSelector(
 
 @Composable
 private fun InfoRow(state: FundDetailState) {
-    Card(
+    OutlinedCard(
         modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Row(
             modifier = Modifier

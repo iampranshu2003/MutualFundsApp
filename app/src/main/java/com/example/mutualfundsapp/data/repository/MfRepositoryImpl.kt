@@ -25,6 +25,13 @@ class MfRepositoryImpl @Inject constructor(
 ) : MutualFundsRepository {
     private val latestNavCache = mutableMapOf<String, CachedNav>()
 
+    override suspend fun getAllFunds(limit: Int, offset: Int): Result<List<FundSummary>> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                api.getAllFunds(limit = limit, offset = offset).map { it.toDomain() }
+            }
+        }
+
     override suspend fun searchFunds(query: String): Result<List<FundSummary>> = withContext(Dispatchers.IO) {
         runCatching {
             api.searchFunds(query).map { it.toDomain() }

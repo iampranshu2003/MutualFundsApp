@@ -1,8 +1,10 @@
 package com.example.mutualfundsapp.presentation.explore
 
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.mutualfundsapp.ui.theme.ThemeViewModel
@@ -16,7 +18,10 @@ fun ExploreRoute(
     onNavigateToFundDetail: (String) -> Unit
 ) {
     val viewModel: ExploreViewModel = hiltViewModel()
-    val themeViewModel: ThemeViewModel = hiltViewModel()
+    // Must use Activity scope: nested composables default to NavBackStackEntry, which would
+    // create a second ThemeViewModel — MainActivity would never see toggle updates.
+    val activity = LocalContext.current as ComponentActivity
+    val themeViewModel: ThemeViewModel = hiltViewModel(activity)
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
