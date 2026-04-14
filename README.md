@@ -1,48 +1,74 @@
-# MutualFundsApp
+# Mutual Funds App
 
-MutualFundsApp is an Android app (Kotlin + Jetpack Compose) for exploring mutual funds, viewing NAV history, and managing custom watchlists.
+An Android app to discover mutual funds, inspect fund performance history, and organize funds into custom watchlist folders.
 
-## Features
+This project was built for the Mobile SDE Intern assignment and focuses on clean architecture, practical state handling, and a smooth user flow from discovery to tracking.
 
-- Explore funds across categories (`Index`, `Bluechip`, `Tax Saver`, `Large Cap`) using MFAPI search keywords.
-- View fund details with:
-  - AMC name
-  - Scheme type
-  - latest NAV
-  - NAV history line chart with date ranges
-- Add/remove a fund to multiple watchlist folders via bottom sheet.
-- Manage watchlist folders and folder-level fund lists.
-- Search funds with 300ms debounce.
-- Light/Dark theme toggle.
-- Local persistence with Room (watchlists) and DataStore cache (Explore screen).
+## What the app supports
 
-## Tech Stack
+- Explore screen with assignment categories: Index, Bluechip, Tax Saver (ELSS), and Large Cap.
+- Up to 4 quick cards per category with a `View All` action.
+- `View All` screen with lazy list rendering and infinite scroll pagination behavior.
+- Dedicated search screen with 300ms debounce to avoid excessive API calls.
+- Fund detail screen with:
+  - Scheme details (name, type/category, NAV)
+  - NAV history line chart
+  - Time range filter (`1M`, `3M`, `6M`, `1Y`, `ALL`)
+- Watchlist flow from product screen:
+  - Bookmark icon reflects whether fund is in any watchlist
+  - Bottom sheet to add/remove from multiple folders
+  - Create new watchlist directly from bottom sheet
+- Watchlist tab with folder list and folder-level fund counts.
+- Empty, loading, and error UI states across key screens.
+- Theme toggle (Light/Dark mode).
+- Local persistence:
+  - Room for watchlists and fund mapping
+  - DataStore-backed local cache for Explore data
 
-- **UI:** Jetpack Compose, Material 3
-- **Architecture:** MVVM + UseCases + Repository pattern
-- **DI:** Hilt
-- **Networking:** Retrofit + OkHttp + Gson
-- **Persistence:** Room + DataStore
-- **Charts:** Vico
-- **Async:** Kotlin Coroutines + Flow
-- **Tests:** JUnit4, MockK, Turbine
+## Tech stack
 
-## Project Structure
+- Kotlin
+- Jetpack Compose + Material 3
+- MVVM + UseCase + Repository layers
+- Hilt (dependency injection)
+- Retrofit + OkHttp + Gson
+- Room (local database)
+- DataStore (local cached responses)
+- Kotlin Coroutines + Flow
+- Vico (chart rendering)
+- JUnit4 + MockK + Turbine (unit tests)
 
-- `app/src/main/java/com/example/mutualfundsapp/presentation` - screens, viewmodels, UI contracts
-- `app/src/main/java/com/example/mutualfundsapp/domain` - models, repository contracts, use cases
-- `app/src/main/java/com/example/mutualfundsapp/data` - API DTOs, repositories, Room, cache
+## API used
+
+- Base URL: `https://api.mfapi.in/`
+- Search endpoint: `https://api.mfapi.in/mf/search?q={query}`
+- Fund detail endpoint: `https://api.mfapi.in/mf/{scheme_code}`
+
+Note: Since MFAPI does not provide direct category APIs, category sections are populated using keyword-based search queries as suggested in the assignment brief.
+
+## Project structure
+
+- `app/src/main/java/com/example/mutualfundsapp/presentation` - Compose screens, contracts, view models, UI components
+- `app/src/main/java/com/example/mutualfundsapp/domain` - models, repository interfaces, use cases
+- `app/src/main/java/com/example/mutualfundsapp/data` - API services, DTOs, repositories, Room, cache
 - `app/src/main/java/com/example/mutualfundsapp/di` - Hilt modules
 
-## Setup & Run
+## How to run
 
-### Requirements
+### Prerequisites
 
-- Android Studio (latest stable recommended)
-- JDK 17+ installed
-- Android SDK with a recent API level and emulator/device
+- Android Studio (latest stable preferred)
+- JDK 17+
+- Android SDK + emulator (or physical device)
 
-### Commands
+### Steps
+
+1. Clone the repository
+2. Open it in Android Studio
+3. Let Gradle sync complete
+4. Run on emulator/device
+
+Build debug APK from terminal:
 
 ```bash
 ./gradlew clean assembleDebug
@@ -54,13 +80,34 @@ Run unit tests:
 ./gradlew clean testDebugUnitTest
 ```
 
-## API
+## Screenshots
 
-- Base URL: `https://api.mfapi.in/`
-- Search: `https://api.mfapi.in/mf/search?q={query}`
-- Fund details + NAV history: `https://api.mfapi.in/mf/{scheme_code}`
+### Explore Screen (Dark)
+![Explore Screen Dark](https://raw.githubusercontent.com/iampranshu2003/MutualFundsApp/main/exploreScreen.jpg)
 
-## Notes
+### Explore Screen (Light)
+![Explore Screen Light](https://raw.githubusercontent.com/iampranshu2003/MutualFundsApp/main/LighTheme.jpg)
 
-- `compileSdk` is set to 36 while AGP is 8.5.2; build works but Gradle may show an advisory warning.
-- Explore categories are populated from keyword-based search due to MFAPI category endpoint limitations.
+### Fund Detail Screen
+![Fund Detail Screen](https://raw.githubusercontent.com/iampranshu2003/MutualFundsApp/main/FundDetailScreen.jpg)
+
+### Add to Watchlist Bottom Sheet
+![Add to Watchlist](https://raw.githubusercontent.com/iampranshu2003/MutualFundsApp/main/addWatchList.jpg)
+
+### Watchlist / Portfolio Screen
+![Watchlist Screen](https://raw.githubusercontent.com/iampranshu2003/MutualFundsApp/main/bookmarkScreen.jpg)
+
+### Search Screen
+![Search Screen](https://raw.githubusercontent.com/iampranshu2003/MutualFundsApp/main/searchScreen.jpg)
+
+## Demo and submission links
+
+- Screen recording (Drive): `Add your public Drive link here`
+- APK (Drive): `Add your public Drive link here`
+- GitHub repository: [MutualFundsApp](https://github.com/iampranshu2003/MutualFundsApp)
+
+## Interview-ready notes
+
+- Architecture and module separation are intentionally kept clean for easier extension.
+- Core assignment functionality is implemented first, with brownie-point features (debounce, theme support, tests) included.
+- The codebase is organized so each screen has clear state, events, and UI contracts for maintainability.
