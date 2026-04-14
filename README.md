@@ -82,23 +82,17 @@ Run unit tests:
 
 ## Screenshots
 
-### Explore Screen (Dark)
-![Explore Screen Dark](https://raw.githubusercontent.com/iampranshu2003/MutualFundsApp/main/exploreScreen.jpg)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/iampranshu2003/MutualFundsApp/main/exploreScreen.jpg" alt="Explore Screen Dark" width="220" />
+  <img src="https://raw.githubusercontent.com/iampranshu2003/MutualFundsApp/main/LighTheme.jpg" alt="Explore Screen Light" width="220" />
+  <img src="https://raw.githubusercontent.com/iampranshu2003/MutualFundsApp/main/FundDetailScreen.jpg" alt="Fund Detail Screen" width="220" />
+</p>
 
-### Explore Screen (Light)
-![Explore Screen Light](https://raw.githubusercontent.com/iampranshu2003/MutualFundsApp/main/LighTheme.jpg)
-
-### Fund Detail Screen
-![Fund Detail Screen](https://raw.githubusercontent.com/iampranshu2003/MutualFundsApp/main/FundDetailScreen.jpg)
-
-### Add to Watchlist Bottom Sheet
-![Add to Watchlist](https://raw.githubusercontent.com/iampranshu2003/MutualFundsApp/main/addWatchList.jpg)
-
-### Watchlist / Portfolio Screen
-![Watchlist Screen](https://raw.githubusercontent.com/iampranshu2003/MutualFundsApp/main/bookmarkScreen.jpg)
-
-### Search Screen
-![Search Screen](https://raw.githubusercontent.com/iampranshu2003/MutualFundsApp/main/searchScreen.jpg)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/iampranshu2003/MutualFundsApp/main/addWatchList.jpg" alt="Add to Watchlist Bottom Sheet" width="220" />
+  <img src="https://raw.githubusercontent.com/iampranshu2003/MutualFundsApp/main/bookmarkScreen.jpg" alt="Watchlist Screen" width="220" />
+  <img src="https://raw.githubusercontent.com/iampranshu2003/MutualFundsApp/main/searchScreen.jpg" alt="Search Screen" width="220" />
+</p>
 
 ## Demo and submission links
 
