@@ -6,6 +6,9 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
+import com.example.mutualfundsapp.data.local.MfDatabase
+import com.example.mutualfundsapp.data.local.dao.WatchlistDao
+import com.example.mutualfundsapp.data.local.dao.WatchlistFundDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -21,6 +21,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.mutualfundsapp.R
@@ -28,14 +29,14 @@ import com.example.mutualfundsapp.presentation.components.EmptyState
 import com.example.mutualfundsapp.presentation.components.ErrorState
 import com.example.mutualfundsapp.presentation.components.FundCard
 import com.example.mutualfundsapp.presentation.components.LoadingState
-import kotlinx.coroutines.flow.receiveAsFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExploreScreen(
     state: ExploreState,
     onEvent: (ExploreEvent) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onToggleTheme: () -> Unit
 ) {
     LaunchedEffect(Unit) {
         onEvent(ExploreEvent.LoadExplore)
@@ -48,16 +49,23 @@ fun ExploreScreen(
                 IconButton(onClick = { onEvent(ExploreEvent.OpenSearch) }) {
                     Icon(Icons.Default.Search, contentDescription = null)
                 }
+                IconButton(onClick = onToggleTheme) {
+                    Icon(painterResource(R.drawable.dark), contentDescription = stringResource(R.string.toggle_theme))
+                }
             }
         )
 
         when {
             state.isLoading -> LoadingState(modifier = Modifier.fillMaxSize())
-            state.error != null -> ErrorState(
-                message = state.error,
-                onRetry = { onEvent(ExploreEvent.Retry) },
-                modifier = Modifier.fillMaxSize()
-            )
+            state.error != null -> {
+                val message = state.error?.takeIf { it.isNotBlank() }
+                    ?: stringResource(R.string.unknown_error)
+                ErrorState(
+                    message = message,
+                    onRetry = { onEvent(ExploreEvent.Retry) },
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
             state.categories.isEmpty() -> EmptyState(
                 title = stringResource(R.string.empty_explore_title),
                 subtitle = stringResource(R.string.empty_explore_subtitle)

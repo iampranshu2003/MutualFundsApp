@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mutualfundsapp.data.cache.ExploreCacheDataStore
 import com.example.mutualfundsapp.domain.usecase.GetExploreCategoriesUseCase
+import com.example.mutualfundsapp.presentation.explore.ExploreEffect.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,9 +33,9 @@ class ExploreViewModel @Inject constructor(
         when (event) {
             ExploreEvent.LoadExplore,
             ExploreEvent.Retry -> loadFromCacheThenRefresh()
-            is ExploreEvent.OpenFund -> sendEffect(ExploreEffect.NavigateToFundDetail(event.schemeCode))
+            is ExploreEvent.OpenFund -> sendEffect(NavigateToFundDetail(event.schemeCode))
             ExploreEvent.OpenSearch -> sendEffect(ExploreEffect.NavigateToSearch)
-            is ExploreEvent.OpenCategory -> sendEffect(ExploreEffect.NavigateToViewAll(event.category))
+            is ExploreEvent.OpenCategory -> sendEffect(NavigateToViewAll(event.category))
         }
     }
 

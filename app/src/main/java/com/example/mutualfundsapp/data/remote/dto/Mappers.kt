@@ -29,6 +29,7 @@ fun FundDetailDto.toDomain(): FundDetail {
     val latestNav = data.firstOrNull()?.nav ?: "--"
 
     return FundDetail(
+        schemeName = meta.scheme_name,
         amcName = meta.fund_house,
         schemeType = meta.scheme_type,
         nav = latestNav,

@@ -101,7 +101,7 @@ class FundDetailViewModel @Inject constructor(
                     _uiState.update { currentState ->
                         currentState.copy(
                             isLoading = false,
-                            schemeName = currentState.schemeName.ifBlank { schemeCode },
+                            schemeName = detail.schemeName.ifBlank { schemeCode },
                             amcName = detail.amcName,
                             schemeType = detail.schemeType,
                             nav = detail.nav,

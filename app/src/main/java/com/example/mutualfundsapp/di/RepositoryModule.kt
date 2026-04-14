@@ -1,6 +1,8 @@
 package com.example.mutualfundsapp.di
 
-import com.example.mutualfundsapp.domain.repository.MututalFundsRepository
+import com.example.mutualfundsapp.data.repository.MfRepositoryImpl
+import com.example.mutualfundsapp.data.repository.WatchlistRepositoryImpl
+import com.example.mutualfundsapp.domain.repository.MutualFundsRepository
 import com.example.mutualfundsapp.domain.repository.WatchlistRepository
 import dagger.Binds
 import dagger.Module
@@ -14,7 +16,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindMfRepository(impl: MfRepositoryImpl): MututalFundsRepository
+    abstract fun bindMfRepository(impl: MfRepositoryImpl): MutualFundsRepository
 
     @Binds
     @Singleton

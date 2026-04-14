@@ -1,5 +1,7 @@
 package com.example.mutualfundsapp.data.remote
 
+import com.example.mutualfundsapp.data.remote.dto.FundDetailDto
+import com.example.mutualfundsapp.data.remote.dto.SearchResultDto
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

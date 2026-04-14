@@ -18,8 +18,8 @@ fun NavChart(
 ) {
     if (points.isEmpty()) return
 
-    val entries = points.map { entryOf(it.nav) }
-    val entryModel = entryModelOf(*entries.toTypedArray())
+    val entries = points.mapIndexed { index, point -> entryOf(x = index, y = point.nav) }
+    val entryModel = entryModelOf(entries)
 
     ProvideChartStyle {
         Chart(

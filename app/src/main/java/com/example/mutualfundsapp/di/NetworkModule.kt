@@ -1,5 +1,6 @@
 package com.example.mutualfundsapp.di
 
+import com.example.mutualfundsapp.BuildConfig
 import com.example.mutualfundsapp.data.remote.MfApiService
 import com.google.gson.Gson
 import dagger.Module

@@ -41,8 +41,7 @@ class MfRepositoryImpl @Inject constructor(
             val cache = cacheDataStore.observeCache().first()
             val now = System.currentTimeMillis()
             val isFresh = cache != null && now - cache.timestamp < 60 * 60 * 1000
-
-            if (isFresh) {
+            if (isFresh && cache != null) {
                 return@withContext Result.success(cache.categories)
             }
 
