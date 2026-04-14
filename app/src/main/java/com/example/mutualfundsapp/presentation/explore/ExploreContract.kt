@@ -14,6 +14,7 @@ sealed class ExploreEvent {
     data class OpenFund(val schemeCode: String) : ExploreEvent()
     object OpenSearch : ExploreEvent()
     data class OpenCategory(val category: String) : ExploreEvent()
+    object ToggleTheme : ExploreEvent()
 }
 
 sealed class ExploreEffect {

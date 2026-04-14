@@ -46,4 +46,5 @@
     <string name="search_try_another">Try a different query</string>
     <string name="tab_explore">Explore</string>
     <string name="tab_watchlist">Watchlist</string>
+    <string name="toggle_theme">Toggle theme</string>
 </resources>
