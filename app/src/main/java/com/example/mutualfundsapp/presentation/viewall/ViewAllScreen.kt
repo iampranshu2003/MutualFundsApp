@@ -81,7 +81,7 @@ fun ViewAllScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = category) },
+                title = { Text(text = categoryTitle(category)) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(
@@ -151,5 +151,16 @@ fun ViewAllScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun categoryTitle(category: String): String {
+    return when (category) {
+        "index" -> stringResource(R.string.category_index)
+        "bluechip" -> stringResource(R.string.category_bluechip)
+        "tax" -> stringResource(R.string.category_tax)
+        "largecap" -> stringResource(R.string.category_largecap)
+        else -> category
     }
 }

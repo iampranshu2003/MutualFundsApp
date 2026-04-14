@@ -7,6 +7,7 @@ import com.example.mutualfundsapp.domain.usecase.GetExploreCategoriesUseCase
 import com.example.mutualfundsapp.presentation.explore.ExploreEffect.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -43,21 +44,16 @@ class ExploreViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
 
-            // 1) Emit cache immediately if exists
-            cacheDataStore.observeCache().collect { cache ->
-                if (cache != null) {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            error = null,
-                            categories = cache.categories
-                        )
-                    }
+            val cache = cacheDataStore.observeCache().first()
+            if (cache != null) {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = null,
+                        categories = cache.categories
+                    )
                 }
             }
-        }
-
-        viewModelScope.launch {
             val result = getExploreCategoriesUseCase()
             result.fold(
                 onSuccess = { categories ->

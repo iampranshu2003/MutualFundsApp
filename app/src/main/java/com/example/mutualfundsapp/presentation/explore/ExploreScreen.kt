@@ -19,7 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -38,10 +37,6 @@ fun ExploreScreen(
     modifier: Modifier = Modifier,
     onToggleTheme: () -> Unit
 ) {
-    LaunchedEffect(Unit) {
-        onEvent(ExploreEvent.LoadExplore)
-    }
-
     Column(modifier = modifier.fillMaxSize()) {
         TopAppBar(
             title = { Text(stringResource(R.string.app_name)) },
@@ -77,40 +72,48 @@ fun ExploreScreen(
                     "tax" to stringResource(R.string.category_tax),
                     "largecap" to stringResource(R.string.category_largecap)
                 )
+                val hasAnyFunds = sections.any { (key, _) -> state.categories[key].orEmpty().isNotEmpty() }
 
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    sections.forEach { (key, title) ->
-                        val funds = state.categories[key].orEmpty()
-                        if (funds.isNotEmpty()) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text(text = title, style = MaterialTheme.typography.titleMedium)
-                                Text(
-                                    text = stringResource(R.string.view_all),
-                                    color = MaterialTheme.colorScheme.primary,
+                if (!hasAnyFunds) {
+                    EmptyState(
+                        title = stringResource(R.string.empty_explore_title),
+                        subtitle = stringResource(R.string.empty_explore_subtitle)
+                    )
+                } else {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        sections.forEach { (key, title) ->
+                            val funds = state.categories[key].orEmpty()
+                            if (funds.isNotEmpty()) {
+                                Row(
                                     modifier = Modifier
-                                        .padding(4.dp)
-                                        .clickable { onEvent(ExploreEvent.OpenCategory(key)) }
-                                )
-                            }
-
-                            LazyRow(
-                                contentPadding = PaddingValues(horizontal = 16.dp),
-                                horizontalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
-                                items(funds) { fund ->
-                                    FundCard(
-                                        name = fund.schemeName,
-                                        nav = fund.nav,
-                                        onClick = { onEvent(ExploreEvent.OpenFund(fund.schemeCode)) }
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(text = title, style = MaterialTheme.typography.titleMedium)
+                                    Text(
+                                        text = stringResource(R.string.view_all),
+                                        color = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier
+                                            .padding(4.dp)
+                                            .clickable { onEvent(ExploreEvent.OpenCategory(key)) }
                                     )
+                                }
+
+                                LazyRow(
+                                    contentPadding = PaddingValues(horizontal = 16.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    items(funds) { fund ->
+                                        FundCard(
+                                            name = fund.schemeName,
+                                            nav = fund.nav,
+                                            onClick = { onEvent(ExploreEvent.OpenFund(fund.schemeCode)) }
+                                        )
+                                    }
                                 }
                             }
                         }

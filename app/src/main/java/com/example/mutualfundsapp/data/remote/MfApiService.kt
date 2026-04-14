@@ -13,4 +13,7 @@ interface MfApiService {
 
     @GET("mf/{scheme_code}")
     suspend fun getFundDetail(@Path("scheme_code") schemeCode: String): FundDetailDto
+
+    @GET("mf/{scheme_code}/latest")
+    suspend fun getLatestNav(@Path("scheme_code") schemeCode: String): FundDetailDto
 }

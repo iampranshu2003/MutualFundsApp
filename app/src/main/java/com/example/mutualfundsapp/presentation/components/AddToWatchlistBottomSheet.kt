@@ -36,6 +36,7 @@ fun AddToWatchlistBottomSheet(
     checked: Map<String, Boolean>,
     onToggle: (watchlistId: String, checked: Boolean) -> Unit,
     onCreateWatchlist: (name: String) -> Unit,
+    onDismiss: () -> Unit,
     onDone: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -43,7 +44,7 @@ fun AddToWatchlistBottomSheet(
     var newWatchlistName by remember { mutableStateOf("") }
 
     ModalBottomSheet(
-        onDismissRequest = onDone,
+        onDismissRequest = onDismiss,
         sheetState = sheetState,
         modifier = modifier
     ) {

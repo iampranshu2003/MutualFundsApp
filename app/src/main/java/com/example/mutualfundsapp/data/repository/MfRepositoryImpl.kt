@@ -23,6 +23,7 @@ class MfRepositoryImpl @Inject constructor(
     private val api: MfApiService,
     private val cacheDataStore: ExploreCacheDataStore
 ) : MutualFundsRepository {
+    private val latestNavCache = mutableMapOf<String, CachedNav>()
 
     override suspend fun searchFunds(query: String): Result<List<FundSummary>> = withContext(Dispatchers.IO) {
         runCatching {
@@ -73,11 +74,30 @@ class MfRepositoryImpl @Inject constructor(
 
         val deferred = keywords.map { (key, query) ->
             async {
-                key to api.searchFunds(query).take(4).map { it.toDomain() }
+                val funds = api.searchFunds(query).take(4).map { result ->
+                    val latestNav = fetchLatestNav(result.schemeCode.toString())
+                    result.toDomain(nav = latestNav)
+                }
+                key to funds
             }
         }
 
         deferred.awaitAll().toMap()
+    }
+
+    private suspend fun fetchLatestNav(schemeCode: String): String {
+        val now = System.currentTimeMillis()
+        val cached = latestNavCache[schemeCode]
+        if (cached != null && now - cached.timestamp < LATEST_NAV_CACHE_TTL_MS) {
+            return cached.nav
+        }
+
+        val nav = runCatching {
+            api.getLatestNav(schemeCode).data.firstOrNull()?.nav ?: "--"
+        }.getOrElse { "--" }
+
+        latestNavCache[schemeCode] = CachedNav(nav = nav, timestamp = now)
+        return nav
     }
 
     fun downsampleNavHistory(
@@ -94,4 +114,13 @@ class MfRepositoryImpl @Inject constructor(
     }
 
     enum class NavRange { ONE_MONTH, THREE_MONTHS, SIX_MONTHS, ONE_YEAR, ALL }
+
+    private data class CachedNav(
+        val nav: String,
+        val timestamp: Long
+    )
+
+    private companion object {
+        const val LATEST_NAV_CACHE_TTL_MS = 30 * 60 * 1000L
+    }
 }

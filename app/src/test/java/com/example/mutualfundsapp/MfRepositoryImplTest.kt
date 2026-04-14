@@ -2,6 +2,9 @@ package com.example.mutualfundsapp
 
 import com.example.mutualfundsapp.data.cache.ExploreCacheDataStore
 import com.example.mutualfundsapp.data.remote.MfApiService
+import com.example.mutualfundsapp.data.remote.dto.FundDetailDto
+import com.example.mutualfundsapp.data.remote.dto.FundMetaDto
+import com.example.mutualfundsapp.data.remote.dto.NavEntryDto
 import com.example.mutualfundsapp.data.remote.dto.SearchResultDto
 import com.example.mutualfundsapp.data.repository.MfRepositoryImpl
 import com.example.mutualfundsapp.domain.model.FundSummary
@@ -54,10 +57,18 @@ class MfRepositoryImplTest {
             categories = mapOf("index" to listOf(FundSummary("old", "Old Fund", "9.0")))
         )
         every { cache.observeCache() } returns flowOf(stale)
-        coEvery { api.searchFunds("index") } returns listOf(SearchResultDto("1", "Fund A"))
-        coEvery { api.searchFunds("bluechip") } returns listOf(SearchResultDto("2", "Fund B"))
-        coEvery { api.searchFunds("tax") } returns listOf(SearchResultDto("3", "Fund C"))
-        coEvery { api.searchFunds("largecap") } returns listOf(SearchResultDto("4", "Fund D"))
+        coEvery { api.searchFunds("index") } returns listOf(SearchResultDto(1L, "Fund A"))
+        coEvery { api.searchFunds("bluechip") } returns listOf(SearchResultDto(2L, "Fund B"))
+        coEvery { api.searchFunds("tax") } returns listOf(SearchResultDto(3L, "Fund C"))
+        coEvery { api.searchFunds("largecap") } returns listOf(SearchResultDto(4L, "Fund D"))
+        coEvery { api.getLatestNav(any()) } returns FundDetailDto(
+            meta = FundMetaDto(
+                fund_house = "House",
+                scheme_type = "Type",
+                scheme_name = "Name"
+            ),
+            data = listOf(NavEntryDto(date = "01-01-2026", nav = "100.00"))
+        )
         coEvery { cache.saveCache(any()) } returns Unit
 
         val result = repo.getExploreCategories()

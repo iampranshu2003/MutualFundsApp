@@ -116,6 +116,7 @@ fun FundDetailScreen(
             onCreateWatchlist = { name ->
                 onEvent(FundDetailEvent.CreateWatchlist(name))
             },
+            onDismiss = { onEvent(FundDetailEvent.CloseBottomSheet) },
             onDone = { onEvent(FundDetailEvent.ApplyWatchlistChanges) }
         )
     }

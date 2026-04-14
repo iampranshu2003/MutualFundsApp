@@ -10,7 +10,7 @@ private val NAV_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy")
 
 fun SearchResultDto.toDomain(nav: String = "--"): FundSummary {
     return FundSummary(
-        schemeCode = schemeCode,
+        schemeCode = schemeCode.toString(),
         schemeName = schemeName,
         nav = nav
     )

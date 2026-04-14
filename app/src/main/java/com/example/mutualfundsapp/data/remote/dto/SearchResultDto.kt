@@ -1,6 +1,6 @@
 package com.example.mutualfundsapp.data.remote.dto
 
 data class SearchResultDto(
-    val schemeCode: String,
+    val schemeCode: Long,
     val schemeName: String
 )
