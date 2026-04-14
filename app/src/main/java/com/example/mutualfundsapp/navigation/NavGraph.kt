@@ -20,10 +20,8 @@ fun NavGraph(
     ) {
         navigation(startDestination = Screen.Explore.route, route = "explore_root") {
             composable(Screen.Explore.route) {
-                ExploreScreen(
-                    state = ,
-                    onEvent =
-                )
+                composable("explore_root") { ExploreNavGraph() }
+                composable("watchlist_root") { WatchlistNavGraph() }
             }
             composable(Screen.Search.route) {
                 SearchScreen(

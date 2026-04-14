@@ -37,10 +37,13 @@
     <string name="category_tax">Tax Saver ELSS</string>
     <string name="category_largecap">Large Cap</string>
     <string name="view_all">View All ›</string>
-    <string name="watchlist_empty_title">No watchlists yet</string>
-    <string name="watchlist_empty_subtitle">Save funds here to track them easily</string>
-    <string name="watchlist_folder_empty_title">No funds in this watchlist</string>
-    <string name="watchlist_folder_empty_subtitle">Add funds to track them here</string>
-    <string name="explore_funds">Explore Funds</string>
-    <string name="remove_fund">Remove fund</string>
+    <string name="no_more_funds">No more funds</string>
+    <string name="search_title">Search</string>
+    <string name="search_hint">Search for mutual funds…</string>
+    <string name="search_empty_title">Search for mutual funds...</string>
+    <string name="search_empty_subtitle">Start typing to see results</string>
+    <string name="search_no_results">No funds found for "%1$s"</string>
+    <string name="search_try_another">Try a different query</string>
+    <string name="tab_explore">Explore</string>
+    <string name="tab_watchlist">Watchlist</string>
 </resources>
