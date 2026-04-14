@@ -40,6 +40,9 @@
     <string name="view_all">View All ></string>
     <string name="no_more_funds">No more funds</string>
     <string name="search_title">Search</string>
+    <string name="mutual_funds_title">Mutual Funds</string>
+    <string name="my_portfolios_title">My Portfolios</string>
+    <string name="clear_search_query">Clear search query</string>
     <string name="search_hint">Search for mutual funds…</string>
     <string name="search_empty_title">Search for mutual funds...</string>
     <string name="search_empty_subtitle">Start typing to see results</string>

@@ -26,34 +26,7 @@ class SearchViewModel @Inject constructor(
             .debounce(300L)
             .filter { it.length >= 2 }
             .distinctUntilChanged()
-            .onEach { _uiState.update { it.copy(isLoading = true, error = null) } }
-            .flatMapLatest { query ->
-                flow {
-                    emit(searchFundsUseCase(query))
-                }
-            }
-            .onEach { result ->
-                result.fold(
-                    onSuccess = { funds ->
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false,
-                                results = funds,
-                                error = null
-                            )
-                        }
-                    },
-                    onFailure = { throwable ->
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false,
-                                results = emptyList(),
-                                error = throwable.message.orEmpty()
-                            )
-                        }
-                    }
-                )
-            }
+            .onEach { query -> runSearch(query) }
             .launchIn(viewModelScope)
     }
 
@@ -62,11 +35,20 @@ class SearchViewModel @Inject constructor(
             is SearchEvent.UpdateQuery -> {
                 _uiState.update { it.copy(query = event.query) }
                 queryFlow.value = event.query
+                if (event.query.length < 2) {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            results = emptyList(),
+                            error = null
+                        )
+                    }
+                }
             }
             SearchEvent.Retry -> {
                 val currentQuery = _uiState.value.query
                 if (currentQuery.length >= 2) {
-                    queryFlow.value = currentQuery
+                    viewModelScope.launch { runSearch(currentQuery) }
                 }
             }
             is SearchEvent.OpenFund -> {
@@ -75,5 +57,30 @@ class SearchViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private suspend fun runSearch(query: String) {
+        _uiState.update { it.copy(isLoading = true, error = null) }
+        val result = searchFundsUseCase(query)
+        result.fold(
+            onSuccess = { funds ->
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        results = funds,
+                        error = null
+                    )
+                }
+            },
+            onFailure = { throwable ->
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        results = emptyList(),
+                        error = throwable.message.orEmpty()
+                    )
+                }
+            }
+        )
     }
 }

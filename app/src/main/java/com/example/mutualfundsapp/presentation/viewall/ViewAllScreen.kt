@@ -69,10 +69,24 @@ fun ViewAllScreen(
     }
 
     // Infinite scroll: trigger next page when nearing end
-    LaunchedEffect(listState) {
+    LaunchedEffect(
+        listState,
+        state.visibleFunds.size,
+        state.isLoading,
+        state.isLoadingMore,
+        state.hasMore
+    ) {
         snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
             .collect { lastVisibleIndex ->
-                if (lastVisibleIndex != null && lastVisibleIndex >= state.visibleFunds.size - 5) {
+                val threshold = (state.visibleFunds.size - 5).coerceAtLeast(0)
+                if (
+                    lastVisibleIndex != null &&
+                    state.visibleFunds.isNotEmpty() &&
+                    !state.isLoading &&
+                    !state.isLoadingMore &&
+                    state.hasMore &&
+                    lastVisibleIndex >= threshold
+                ) {
                     onEvent(ViewAllEvent.LoadNextPage)
                 }
             }

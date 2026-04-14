@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mutualfundsapp.R
@@ -20,18 +21,43 @@ fun MainScreen() {
 
     Scaffold(
         bottomBar = {
-            NavigationBar {
+            NavigationBar(
+                containerColor = MaterialTheme.colorScheme.surface,
+                tonalElevation = 1.dp
+            ) {
                 NavigationBarItem(
                     selected = currentRoute?.destination?.route == "explore_root",
-                    onClick = { rootNav.navigate("explore_root") },
+                    onClick = {
+                        rootNav.navigate("explore_root") {
+                            popUpTo(rootNav.graph.startDestinationId) { saveState = true }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
                     icon = { Icon(Icons.Default.Home, contentDescription = null) },
-                    label = { Text(stringResource(R.string.tab_explore)) }
+                    label = { Text(stringResource(R.string.tab_explore)) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        selectedTextColor = MaterialTheme.colorScheme.primary,
+                        indicatorColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
                 )
                 NavigationBarItem(
                     selected = currentRoute?.destination?.route == "watchlist_root",
-                    onClick = { rootNav.navigate("watchlist_root") },
+                    onClick = {
+                        rootNav.navigate("watchlist_root") {
+                            popUpTo(rootNav.graph.startDestinationId) { saveState = true }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
                     icon = { Icon(painterResource(R.drawable.bookmark), contentDescription = null) },
-                    label = { Text(stringResource(R.string.tab_watchlist)) }
+                    label = { Text(stringResource(R.string.tab_watchlist)) },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        selectedTextColor = MaterialTheme.colorScheme.primary,
+                        indicatorColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
                 )
             }
         }

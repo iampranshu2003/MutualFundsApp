@@ -1,5 +1,10 @@
 package com.example.mutualfundsapp.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -41,7 +46,31 @@ fun ExploreNavGraph() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Explore.route
+        startDestination = Screen.Explore.route,
+        enterTransition = {
+            slideInHorizontally(
+                animationSpec = tween(240),
+                initialOffsetX = { fullWidth -> fullWidth / 4 }
+            ) + fadeIn(animationSpec = tween(240))
+        },
+        exitTransition = {
+            slideOutHorizontally(
+                animationSpec = tween(220),
+                targetOffsetX = { fullWidth -> -fullWidth / 5 }
+            ) + fadeOut(animationSpec = tween(220))
+        },
+        popEnterTransition = {
+            slideInHorizontally(
+                animationSpec = tween(240),
+                initialOffsetX = { fullWidth -> -fullWidth / 4 }
+            ) + fadeIn(animationSpec = tween(240))
+        },
+        popExitTransition = {
+            slideOutHorizontally(
+                animationSpec = tween(220),
+                targetOffsetX = { fullWidth -> fullWidth / 5 }
+            ) + fadeOut(animationSpec = tween(220))
+        }
     ) {
         composable(Screen.Explore.route) {
             ExploreRoute(
@@ -93,7 +122,31 @@ fun WatchlistNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Watchlist.route
+        startDestination = Screen.Watchlist.route,
+        enterTransition = {
+            slideInHorizontally(
+                animationSpec = tween(240),
+                initialOffsetX = { fullWidth -> fullWidth / 4 }
+            ) + fadeIn(animationSpec = tween(240))
+        },
+        exitTransition = {
+            slideOutHorizontally(
+                animationSpec = tween(220),
+                targetOffsetX = { fullWidth -> -fullWidth / 5 }
+            ) + fadeOut(animationSpec = tween(220))
+        },
+        popEnterTransition = {
+            slideInHorizontally(
+                animationSpec = tween(240),
+                initialOffsetX = { fullWidth -> -fullWidth / 4 }
+            ) + fadeIn(animationSpec = tween(240))
+        },
+        popExitTransition = {
+            slideOutHorizontally(
+                animationSpec = tween(220),
+                targetOffsetX = { fullWidth -> fullWidth / 5 }
+            ) + fadeOut(animationSpec = tween(220))
+        }
     ) {
         composable(Screen.Watchlist.route) {
             WatchlistRoute(

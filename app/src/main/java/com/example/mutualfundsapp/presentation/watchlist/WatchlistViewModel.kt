@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,6 +27,8 @@ class WatchlistViewModel @Inject constructor(
     val uiState: StateFlow<WatchlistState> = _uiState.asStateFlow()
 
     val effect = Channel<WatchlistEffect>(Channel.BUFFERED)
+    private var watchlistsJob: Job? = null
+    private var selectedWatchlistId: String? = null
 
     init {
         loadWatchlists()
@@ -44,10 +47,20 @@ class WatchlistViewModel @Inject constructor(
     }
 
     private fun loadWatchlists() {
-        viewModelScope.launch {
+        watchlistsJob?.cancel()
+        watchlistsJob = viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             getAllWatchlistsUseCase().collectLatest { watchlists ->
-                _uiState.update { it.copy(isLoading = false, watchlists = watchlists) }
+                val selectedFunds = selectedWatchlistId?.let { id ->
+                    watchlists.find { it.id == id }?.funds
+                } ?: _uiState.value.selectedWatchlistFunds
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        watchlists = watchlists,
+                        selectedWatchlistFunds = selectedFunds
+                    )
+                }
             }
         }
     }
@@ -76,6 +89,7 @@ class WatchlistViewModel @Inject constructor(
     }
 
     private fun loadWatchlistFunds(watchlistId: String) {
+        selectedWatchlistId = watchlistId
         val watchlist = _uiState.value.watchlists.find { it.id == watchlistId }
         val funds = watchlist?.funds ?: emptyList()
         _uiState.update {

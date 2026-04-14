@@ -70,7 +70,7 @@ fun WatchlistScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("My Portfolios") }
+                title = { Text(stringResource(R.string.my_portfolios_title)) }
             )
         },
         modifier = modifier
